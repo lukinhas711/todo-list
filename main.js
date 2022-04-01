@@ -1,78 +1,76 @@
-const inputTask = document.querySelector(".input-task");
-const buttonTask = document.querySelector(".btn-task");
+const inputAddTask = document.querySelector(".input-task");
+const buttonAdd = document.querySelector(".btn-task");
 const tasks = document.querySelector(".tasks");
 
-inputTask.addEventListener("keypress", function (e) {
-  if (e.keyCode === 13) {
-    if (!inputTask.value) return;
-    createTask(inputTask.value);
-    saveTasks();
-  }
-});
-
-function cleanInput() {
-  inputTask.value = "";
-  inputTask.focus();
-}
-
-function butonClean(taskList) {
+function buttonDelete(list) {
   const button = document.createElement("button");
   button.innerText = "Apagar";
   button.style.margin = "0 5px";
   button.setAttribute("class", "remove");
-  taskList.appendChild(button);
+  list.appendChild(button);
 }
 
-function createTaskList() {
+function clearInput() {
+  inputAddTask.value = "";
+  inputAddTask.focus();
+}
+
+function createList() {
   const li = document.createElement("li");
   return li;
 }
 
-function createTask(task) {
-  const taskList = createTaskList();
-  taskList.innerHTML = task;
-  tasks.appendChild(taskList);
-  cleanInput();
-  butonClean(taskList);
+function addTask(task) {
+  const li = createList();
+  li.innerText = task;
+  tasks.appendChild(li);
+  buttonDelete(li);
 }
 
-buttonTask.addEventListener("click", function () {
-  if (!inputTask.value) return;
-
-  createTask(inputTask.value);
-  saveTasks();
-});
-
-document.addEventListener("click", function (e) {
-  const el = e.target;
-
-  if (el.classList.contains("remove")) {
-    el.parentElement.remove();
-    saveTasks();
+inputAddTask.addEventListener("keypress", (e) => {
+  if (e.keyCode === 13) {
+    if (!inputAddTask.value) return;
+    addTask(inputAddTask.value);
+    clearInput();
+    saveOnLocalStorage();
   }
 });
 
-function saveTasks() {
-  const liTasks = tasks.querySelectorAll("li");
-  const listOfTasks = [];
+buttonAdd.addEventListener("click", () => {
+  if (!inputAddTask.value) return;
+  addTask(inputAddTask.value);
+  clearInput();
+  saveOnLocalStorage();
+});
 
-  for (let task of liTasks) {
-    let taskText = task.innerText;
-    taskText = taskText.replace("Apagar", "").trim();
-    listOfTasks.push(taskText);
+document.addEventListener("click", (e) => {
+  const element = e.target;
+  if (element.classList.contains("remove")) {
+    element.parentElement.remove();
+    saveOnLocalStorage();
+  }
+});
+
+function saveOnLocalStorage() {
+  const liOfTasks = document.querySelectorAll("li");
+  let todoList = [];
+
+  for (let task of liOfTasks) {
+    let textTask = task.innerText;
+    textTask = textTask.replace("Apagar", "").trim();
+    todoList.push(textTask);
   }
 
-  const tasksJSON = JSON.stringify(listOfTasks);
-  localStorage.setItem("tasks", tasksJSON);
+  const tasksJson = JSON.stringify(todoList);
+  localStorage.setItem("tasks", tasksJson);
 }
 
-function takeTasks() {
+function catchTasks() {
   const tasks = localStorage.getItem("tasks");
-  let listOfTasks = JSON.parse(tasks);
-
-  for (task of listOfTasks) {
-    createTask(task);
+  let tasksParce = JSON.parse(tasks);
+  for (let task of tasksParce) {
+    addTask(task);
   }
 }
 
-takeTasks();
+catchTasks();
