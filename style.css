@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
 :root {
-  --primary-color: rgb(17, 86, 102);
-  --primary-color-darker: rgb(9, 48, 56);
+  --primary-color: #1e40af;
+  --primary-color-darker: #312e81;
 }
 
 * {
   box-sizing: border-box;
   outline: 0;
+  color: #111827;
 }
 
 body {
@@ -19,11 +20,32 @@ body {
 }
 
 .container {
-  max-width: 640px;
+  max-width: 40%;
   margin: 50px auto;
-  background: #fff;
+  background: #94a3b879;
+  backdrop-filter: blur(2px);
   padding: 20px;
   border-radius: 10px;
+}
+
+.btn-task{
+  background-color: #312e81;
+  color: #fff;
+  border: 0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.btn-task:hover {
+  background-color: #1e40af;
+}
+
+.done {
+  background-color: #16a34a;
+  color: #fff;
+  border: 0;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 form input, form label, form button {
@@ -35,8 +57,7 @@ form input, form label, form button {
 form input {
   font-size: 24px;
   height: 50px;
-  padding: 0 20px;
-}
+  padding: 0 20px;}
 
 form input:focus {
   outline: 1px solid var(--primary-color);
