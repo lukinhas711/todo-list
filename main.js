@@ -2,12 +2,12 @@ const inputAddTask = document.querySelector(".input-task");
 const buttonAdd = document.querySelector(".btn-task");
 const tasks = document.querySelector(".tasks");
 
-function buttonDelete(list) {
+function buttonClear(li) {
   const button = document.createElement("button");
   button.innerText = "Apagar";
   button.style.margin = "0 5px";
-  button.setAttribute("class", "remove");
-  list.appendChild(button);
+  button.setAttribute("class", "delete");
+  li.appendChild(button);
 }
 
 function clearInput() {
@@ -15,22 +15,22 @@ function clearInput() {
   inputAddTask.focus();
 }
 
-function createList() {
+function createLiTag() {
   const li = document.createElement("li");
   return li;
 }
 
-function addTask(task) {
-  const li = createList();
+function createTask(task) {
+  const li = createLiTag();
   li.innerText = task;
   tasks.appendChild(li);
-  buttonDelete(li);
+  buttonClear(li);
 }
 
 inputAddTask.addEventListener("keypress", (e) => {
   if (e.keyCode === 13) {
     if (!inputAddTask.value) return;
-    addTask(inputAddTask.value);
+    createTask(inputAddTask.value);
     clearInput();
     saveOnLocalStorage();
   }
@@ -38,39 +38,40 @@ inputAddTask.addEventListener("keypress", (e) => {
 
 buttonAdd.addEventListener("click", () => {
   if (!inputAddTask.value) return;
-  addTask(inputAddTask.value);
+  createTask(inputAddTask.value);
   clearInput();
   saveOnLocalStorage();
 });
 
 document.addEventListener("click", (e) => {
-  const element = e.target;
-  if (element.classList.contains("remove")) {
-    element.parentElement.remove();
+  const el = e.target;
+  if (el.classList.contains("delete")) {
+    el.parentElement.remove();
     saveOnLocalStorage();
   }
 });
 
 function saveOnLocalStorage() {
-  const liOfTasks = document.querySelectorAll("li");
+  const liTasks = tasks.querySelectorAll("li");
   let todoList = [];
 
-  for (let task of liOfTasks) {
+  for (let task of liTasks) {
     let textTask = task.innerText;
     textTask = textTask.replace("Apagar", "").trim();
     todoList.push(textTask);
   }
 
-  const tasksJson = JSON.stringify(todoList);
-  localStorage.setItem("tasks", tasksJson);
+  const taskJSON = JSON.stringify(todoList);
+  localStorage.setItem("tasks", taskJSON);
 }
 
-function catchTasks() {
-  const tasks = localStorage.getItem("tasks");
-  let tasksParce = JSON.parse(tasks);
-  for (let task of tasksParce) {
-    addTask(task);
+function getLocalStorage() {
+  let tasks = localStorage.getItem("tasks");
+  tasks = JSON.parse(tasks);
+
+  for (let task of tasks) {
+    createTask(task);
   }
 }
 
-catchTasks();
+getLocalStorage();
